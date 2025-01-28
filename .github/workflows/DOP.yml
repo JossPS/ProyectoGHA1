@@ -1,53 +1,30 @@
-name: Deploy CI/CD
+name: deploy
 
+# Controla cuándo el workflow corre
 on:
+  # Se ejecuta cuando hay un push o una solicitud de pull request en la rama "main"
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+
+  # Permite que el workflow se ejecute manualmente desde la pestaña de Actions en GitHub
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # Este workflow contiene un job llamado "build"
+    runs-on: ubuntu-latest  # El job se ejecutará en un runner con el sistema operativo Ubuntu (la última versión disponible)
 
     steps:
-      - name: Clonar el repositorio
-        uses: actions/checkout@v4
+      # Tareas individuales que se ejecutarán en el job
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4  # Clona el repositorio en el runner para que los siguientes steps tengan acceso al código
 
-      - name: Configurar Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18  # O la versión que uses
+      - name: Ejecutar comando de prueba
+        run: echo "Prueba, CI"  # Ejecuta un comando que imprime "Prueba, CI" en la consola
 
-      - name: Instalar dependencias
-        run: npm install
-
-      - name: Ejecutar pruebas
-        run: npm test  # Reemplázalo con tu comando de pruebas
-
-      - name: Construir el proyecto
-        run: npm run build  # Reemplázalo si tienes un script diferente
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Clonar el repositorio
-        uses: actions/checkout@v4
-
-      - name: Configurar Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Instalar dependencias
-        run: npm install
-
-      - name: Desplegar a GitHub Pages
-        if: success()
-        run: npm run deploy  # Si tu proyecto usa GitHub Pages, cambia esto según tu configuración
-
-      - name: Mensaje final
-        run: echo "Despliegue completado con éxito."
+      - name: Más pasos en el script
+        run: |
+          echo "Add other actions to build,"
+          echo "test, and deploy your project."
