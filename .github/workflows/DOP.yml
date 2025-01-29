@@ -1,30 +1,30 @@
-name: deploy
-
-# Controla cuándo el workflow corre
+name: Flujo_trabajo # nombre del flujo de trabajo
+# evento que activa el flujo de trabajo 
 on:
-  # Se ejecuta cuando hay un push o una solicitud de pull request en la rama "main"
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  # Permite que el workflow se ejecute manualmente desde la pestaña de Actions en GitHub
-  workflow_dispatch:
+    branches:
+      - main
+# El flujo se ejecutará cada vez que haya un push (es decir, una actualización o un nuevo commit) a la rama main.
+# configuración del trabajo
 
 jobs:
-  build:
-    # Este workflow contiene un job llamado "build"
-    runs-on: ubuntu-latest  # El job se ejecutará en un runner con el sistema operativo Ubuntu (la última versión disponible)
-
+# Identificador del trabajo (job) dentro del flujo de trabajo.
+  example-job:
+   # El job se ejecutará en un runner con el sistema operativo Ubuntu en su última versión.
+    runs-on: ubuntu-latest
+    # Pasos del job
     steps:
-      # Tareas individuales que se ejecutarán en el job
-      - name: Checkout del repositorio
-        uses: actions/checkout@v4  # Clona el repositorio en el runner para que los siguientes steps tengan acceso al código
-
-      - name: Ejecutar comando de prueba
-        run: echo "Prueba, CI"  # Ejecuta un comando que imprime "Prueba, CI" en la consola
-
-      - name: Más pasos en el script
+      # Checkout del código
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # Este paso utiliza la acción oficial actions/checkout en su versión 3.
+      # Clona el código fuente del repositorio en el runner para que pueda ser utilizado por otros pasos.
+      # Uso del GITHUB_TOKEN
+      - name: Use GITHUB_TOKEN
+      # Ejecuta el comando curl para realizar una llamada a la API de GitHub.
         run: |
-          echo "Add other actions to build,"
-          echo "test, and deploy your project."
+          curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Accept: application/vnd.github.v3+json" \
+               https://api.github.com/user/repos
+# GITHUB_TOKEN se genera automáticamente para cada ejecución del flujo y tiene permisos predeterminados para interactuar con el repositorio.
+# versión 3 de la API de GitHub.
